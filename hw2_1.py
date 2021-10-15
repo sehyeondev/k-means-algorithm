@@ -73,6 +73,7 @@ def k_means(input_file, k_init_points):
 # [4] get diameter of k clusters
 # [5] print average diameter
 
+
 def main():
     input_file = sys.argv[1] # get input file
     # print (type(sys.argv[2]))
