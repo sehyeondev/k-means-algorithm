@@ -1,5 +1,4 @@
 import sys
-# import math
 from pyspark import SparkConf, SparkContext
 
 ## ======================================
@@ -26,45 +25,64 @@ def get_closest_cluster(k_init_features, point):
 ## cluster remaining points
 ## ============================================
 # initialize k points
+# def initialize_k_points(input_file, k_value):
+#     init_points = [0] # pick first point as first point in the dataset
+#     file = open(input_file, "r")
+#     lines = file.readlines()
+#     file.close()
+#     while len(init_points) < k_value:
+#         max_dis = [10**9, 0]
+#         for i in range(len(lines)):
+#             cand_point = lines[i].split()
+#             min_dis = [10**9, 10**9]
+#             for j in init_points:
+#                 if i in init_points:
+#                     continue
+#                 dis = get_distance(cand_point, lines[j].split())
+#                 if dis <= min_dis[1]:
+#                     min_dis[0] = i
+#                     min_dis[1] = dis
+#                 if min_dis[1] >= max_dis[1]:
+#                     max_dis[0] = min_dis[0]
+#                     max_dis[1] = min_dis[1]
+#                     if len(init_points) == 3 and i == 3896:
+#                         print("if 3 points are added and i is 3896")
+#                         print(max_dis, min_dis)
+#                 # i += 1
+#             if (i == 3896):
+#                 print ("3896")
+#                 print (init_points)
+#                 print (max_dis, min_dis)
+#             if (i == 3466):
+#                 print ("3466")
+#                 print (init_points)
+#                 print (max_dis, min_dis)
+#             if (i == 3506):
+#                 print ("3506")
+#                 print (init_points)
+#                 print (max_dis, min_dis)
+#         init_points.append(max_dis[0])
+#     return init_points
+
 def initialize_k_points(input_file, k_value):
     init_points = [0] # pick first point as first point in the dataset
     file = open(input_file, "r")
     lines = file.readlines()
     file.close()
+    
     while len(init_points) < k_value:
-        max_dis = [10**9, 0]
+        find_max = []
         for i in range(len(lines)):
             cand_point = lines[i].split()
-            min_dis = [10**9, 10**9]
+            find_min = []
             for j in init_points:
-                if i in init_points:
-                    continue
-                dis = get_distance(cand_point, lines[j].split())
-                if dis <= min_dis[1]:
-                    min_dis[0] = i
-                    min_dis[1] = dis
-                if min_dis[1] >= max_dis[1]:
-                    max_dis[0] = min_dis[0]
-                    max_dis[1] = min_dis[1]
-                    if len(init_points) == 3 and i == 3896:
-                        print("if 3 points are added and i is 3896")
-                        print(max_dis, min_dis)
-                # i += 1
-            if (i == 3896):
-                print ("3896")
-                print (init_points)
-                print (max_dis, min_dis)
-            if (i == 3466):
-                print ("3466")
-                print (init_points)
-                print (max_dis, min_dis)
-            if (i == 3506):
-                print ("3506")
-                print (init_points)
-                print (max_dis, min_dis)
-        init_points.append(max_dis[0])
+                find_min.append(get_distance(cand_point, lines[j].split()))
+            min_dis = min(find_min)
+            find_max.append(min_dis)
+        max_dis = max(find_max)
+        init_points.append(find_max.index(max_dis))
+    
     return init_points
-
 # cluster remaining points
 def k_means(input_file, k_init_points):
     # make lines as list
